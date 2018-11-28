@@ -10,23 +10,32 @@ class Node {
     }
 }
 
-function init() {
-    $n1 = new Node(1);
-    $n2 = new Node(2);
-    $n3 = new Node(3);
-    $n4 = new Node(4);
-    $n5 = new Node(5);
-    $n6 = new Node(6);
-    $n7 = new Node(7);
-    $n1->next = $n2;
-    $n2->next = $n3;
-    $n3->next = $n4;
-    $n4->next = $n5;
-    $n5->next = $n6;
-    $n6->next = $n7;
-    return $n1;
+/**
+ * 构建n个节点的单项链表，每个节点的值从1-n递增
+ * @param $n
+ * @return Node|null 节点头指针
+ */
+function init($n) {
+  $head = new Node(-1);
+  $current = $head;
+  $v = $n;
+  while ($n) {
+    $tmp = new Node($v-($n-1));
+    $tmp->next = null;
+    $current->next = $tmp;
+    $current = $tmp;
+    $n--;
+  }
+  $head = $head->next;
+  return $head;
 }
 
+/**
+ * 寻找链表中倒数第n个节点
+ * @param Node $link 链表
+ * @param int $n     第n个节点
+ * @return Node | null
+ */
 function backword_n($link,$n) {
     $i = 0;
     $target = $link;
@@ -41,5 +50,27 @@ function backword_n($link,$n) {
     return $target;
 }
 
-$list = init();
-var_dump(backword_n($list,5));
+/**
+ * 翻转链表
+ * 要点：只在两个节点间操作，不操作3个节点
+ * @param Node $head
+ * @return Node
+ */
+function revert(Node $head) {
+  $pre = null;
+  while ($head != null) {
+    //先保存该节点的下一个节点
+    $next = $head->next;
+    //翻转该节点的next指针，指向前节点pre
+    $head->next = $pre;
+    //前节点pre迁移到当前节点位置
+    $pre = $head;
+    //当前节点迁移到它下一个节点位置
+    $head = $next;
+  }
+  return $pre;
+}
+
+$list = init(7);
+//var_dump(backword_n($list,1));
+var_dump(revert($list));
