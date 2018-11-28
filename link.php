@@ -71,6 +71,63 @@ function revert(Node $head) {
   return $pre;
 }
 
+/**
+ * 删除指定值的节点
+ * @param Node $link
+ * @param $value
+ * @return Node|null 返回被删除的节点，返回的节点next已经处理为null
+ */
+function delete(Node &$link,$value) {
+  $current = $link;
+  $pre = null;
+  while ($current != null) {
+    if($current->val == $value) {
+      //要删除头结点
+      if($pre == null) {
+        $link = $link->next;
+        $current->next = null;
+        return $current;
+      }
+      $pre->next = $current->next;
+      $current->next = null;
+      return $current;
+    }
+    $pre = $current;
+    $current = $current->next;
+  }
+  return null;
+}
+
+/**
+ * 打印整个链表的节点值及指针指向
+ * @param Node $link
+ * @return string
+ */
+function print_link(Node $link) {
+  $str = '';
+  while ($link != null) {
+    $str .= "{$link->val}->";
+    $link = $link->next;
+  }
+  $str .= "NULL \n";
+  return $str;
+}
+
+/**
+ * 打印单个节点的值
+ * @param Node $node
+ * @return string
+ */
+function print_node(Node $node) {
+  if($node != null)
+    return "{$node->val} \n";
+  return "NULL \n";
+}
+
 $list = init(7);
-//var_dump(backword_n($list,1));
-var_dump(revert($list));
+echo "链表：".print_link($list);
+echo "链表倒数第3个节点：".print_node(backword_n($list,3));
+$list = revert($list);
+echo "链表翻转后：".print_link($list);
+delete($list,3);
+echo "删除值为3的节点后，链表为：".print_link($list);
